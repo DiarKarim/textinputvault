@@ -3,69 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Image Gallery</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-  }
-  .gallery-container {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 10px;
-    margin-top: 20px;
-  }
-  .gallery-item {
-    width: 210px;
-    height: 150px;
-    position: relative;
-    overflow: hidden;
-  }
-  .gallery-item img {
-    width: 100%;
-    height: auto;
-    position: absolute;
-    top: 50px;
-    left: 0;
-  }
-  .image-title {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 50px;
-    background-color: white;
-    color: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    overflow: hidden;
-  }
-  .site-title {
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    margin: 20px 0;
-  }
-</style>
+<title>Gallery with zoomwall.js</title>
+<link rel="stylesheet" type="text/css" href="zoomwall.css" />
 </head>
 <body>
 
-<div class="site-title">Textinput Vault</div>
-<div class="gallery-container" id="gallery"></div>
+<div id="gallery" class="zoomwall">
+  <!-- Images will be dynamically added here -->
+</div>
 
+<script src="zoomwall.js"></script>
 <script>
-// Sample list of images and gifs. You should replace this with the actual file names.
-const images = ['15.gif', '2.gif', '3.gif', '4.gif', '5.gif', '13.gif'];
-
+// Function to dynamically load images from 'imageList.json' and add to the gallery
 function loadImages() {
-  const gallery = document.getElementById('gallery');
-  images.forEach(image => {
-    const item = document.createElement('div');
-    item.className = 'gallery-item';
-    item.innerHTML = `<div class="image-title">${image}</div><img src="media/${image}" alt="${image}">`;
-    gallery.appendChild(item);
-  });
+  fetch('imageList.json')
+    .then(response => response.json())
+    .then(imageList => {
+      const gallery = document.getElementById('gallery');
+      imageList.forEach(imageName => {
+        const img = document.createElement('img');
+        img.src = `media/${imageName}`;
+        img.setAttribute('data-highres', `media/${imageName}`); // If you still need this attribute
+        gallery.appendChild(img);
+      });
+
+      zoomwall.create(gallery, true);
+    })
+    .catch(error => console.error('Error loading image list:', error));
 }
 
 window.onload = loadImages;

@@ -6,12 +6,15 @@
   
   .gallery-item {
     position: relative; /* For positioning the title */
+    width: 210px; 
+    height: 150px; /* Title height (50px) + Image Height (100px) */ 
   }
   
   .gallery-item img, 
-  .gallery-item gif { 
-    width: 100%;   
-    height: auto;  /* Maintain aspect ratio */
+  .gallery-item video { 
+    width: 210px;
+    height: 100px;
+    object-fit: cover; /* For cropping */
   } 
   
   .title-overlay {
